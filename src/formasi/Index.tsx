@@ -3,6 +3,7 @@ import { columns, Response } from "./columns"
 import { DataTable } from "./data-table"
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
+import { formatDateWithOffset } from "@/utils"
 
 
 export default function Formasi() {
@@ -41,6 +42,14 @@ export default function Formasi() {
   return (
     <div className="container mx-auto py-10 bg-stone-900 text-white">
       <h1 className="text-3xl font-bold mb-5 text-center tracking-wide">Formasi SSCASN</h1>
+      <p className="text-center text-white mb-4 text-sm">
+        Data formasi diambil dari <a className="underline italic" href="https://sscasn.bkn.go.id/" target="_blank" rel="noreferrer">sscasn.bkn.go.id</a> dan diupdate setiap tiga jam sekali.
+        Terakhir diambil pada {
+          formatDateWithOffset(response?.data[0].updated_at ?? "", 0)
+        } WIB. <br />
+        Mention tweet ke <a className="underline italic" href="https://twitter.com/mrayhanfadil" target="_blank" rel="noreferrer">@mrayhanfadil</a> untuk request program studi lainnya.
+      </p>
+
       <div className="flex w-full items-center space-x-2 mb-5 text-black">
         <Input ref={inputRef} type="text" placeholder="Cari berdasarkan jabatan" />
         {
@@ -57,18 +66,26 @@ export default function Formasi() {
       </div>
       {
         isLoading ? (
-          <div>Loading...</div>
+          <div className=" w-full text-white text-center font-bold animate-bounce">Loading...</div>
         ) : (
-          <DataTable
-            columns={columns}
-            data={response?.data ?? []}
-            pagination={response?.pagination}
-            onNextPage={() => setQuery((prev) => ({ ...prev, page: prev.page + 1 }))}
-            onPrevPage={() => setQuery((prev) => ({ ...prev, page: prev.page - 1 }))}
-            loading={isLoadingPage}
-            onSort={(sortBy, sortOrder) => setQuery((prev) => ({ ...prev, page: 1, sortBy, sortOrder }))}
-            query={query}
-          />
+          <>
+            <p className="text-right text-white text-sm">
+              <span className="font-bold">
+                Klik header kolom {' '}
+              </span>
+              untuk mengurutkan data gaji min, gaji max, dan jumlah kebutuhan.
+            </p>
+            <DataTable
+              columns={columns}
+              data={response?.data ?? []}
+              pagination={response?.pagination}
+              onNextPage={() => setQuery((prev) => ({ ...prev, page: prev.page + 1 }))}
+              onPrevPage={() => setQuery((prev) => ({ ...prev, page: prev.page - 1 }))}
+              loading={isLoadingPage}
+              onSort={(sortBy, sortOrder) => setQuery((prev) => ({ ...prev, page: 1, sortBy, sortOrder }))}
+              query={query}
+            />
+          </>
         )
       }
     </div>
