@@ -51,7 +51,7 @@ export default function Formasi() {
       </p>
 
       <div className="flex w-full items-center space-x-2 mb-5 text-black">
-        <Input ref={inputRef} type="text" placeholder="Cari berdasarkan jabatan" />
+        <Input ref={inputRef} type="text" placeholder="Cari berdasarkan jabatan / instansi" />
         {
           query.search && (
             <Button variant='destructive' onClick={() => {
