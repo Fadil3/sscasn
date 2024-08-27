@@ -29,15 +29,25 @@ export default function Formasi() {
   });
 
   useEffect(() => {
-    setIsLoadingPage(true)
-    fetch(`${apiUrl}/formasi?${params.toString()}`)
-      .then((response) => response.json())
-      .then((data) => setResponse(data))
-      .finally(() => {
-        setIsLoading(false)
-        setIsLoadingPage(false)
-      })
-  }, [query])
+    const fetchData = async () => {
+      setIsLoadingPage(true);
+      try {
+        const response = await fetch(`${apiUrl}/formasi?${params.toString()}`);
+        if (!response.ok) {
+          throw new Error("Network response was not ok");
+        }
+        const data = await response.json();
+        setResponse(data);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      } finally {
+        setIsLoading(false);
+        setIsLoadingPage(false);
+      }
+    };
+
+    fetchData();
+  }, [query]);
 
   return (
     <div className="container mx-auto py-10 bg-stone-900 text-white">
